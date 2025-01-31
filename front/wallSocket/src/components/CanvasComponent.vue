@@ -19,7 +19,7 @@ const resizeCanvas = () => {
    console.log(toolbar);
    if (!canvas ||  !toolbar) return;
    canvas.width = window.innerWidth - toolbar.clientWidth;
-   canvas.width = window.innerHeight;
+   canvas.height = window.innerHeight -toolbar.clientHeight ;
 }
 
 // Démarrer me dessin
@@ -70,12 +70,24 @@ const draw = (el: MouseEvent) => {
 
 onMounted(() => {
    resizeCanvas();
-   const canvas = canvasRef.value;
-   if (!canvas) return;
-   const ctx = canvas.getContext('2d');
-   canvasRef.value.getContext('2d')
+//   const canvas = canvasRef.value;
+// //   if (!canvas) return;
 
-   console.log(canvasRef.value)
+// //   const ctx = canvas.getContext("2d");
+// //   canvasRef.value.getContext("2d");
+// //   console.log(canvasRef.value);
+
+  
+// //   ctx.fillStyle = "red";
+// //   ctx.fillRect(10, 10, 100, 10); // Un carré vert
+// //   ctx.strokeStyle = "green";
+// //   ctx.strokeRect(150, 10, 100, 100);
+
+// // ctx.beginPath();
+// // ctx.moveTo(50, 50);
+// // ctx.lineTo(200, 50);
+// // ctx.lineTo(200, 200);
+// // ctx.stroke();
 })
 
 </script>
