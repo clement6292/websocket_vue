@@ -1,5 +1,5 @@
 <template>
-   <canvas @mousedown="satrtDrawing" @mousemove="draw" ref="canvasRef" class="border   border-dark">
+   <canvas @mousedown="startDrawing" @mousemove="draw" ref="canvasRef" class="border   border-dark">
 
    </canvas>
 </template>
@@ -23,7 +23,7 @@ const resizeCanvas = () => {
 }
 
 // Démarrer me dessin
-const satrtDrawing = (e: MouseEvent) => {
+const startDrawing = (e: MouseEvent) => {
    console.log('start drawing', e);
 
    lastPoint.value = {
@@ -49,7 +49,7 @@ const draw = (el: MouseEvent) => {
    
    
 
-   const cuurentPoint = {
+   const currentPoint = {
       x: el.clientX,
       y: el.clientY
    }
@@ -62,7 +62,7 @@ const draw = (el: MouseEvent) => {
    ctx.beginPath();
    ctx.strokeStyle = "red";
    ctx.moveTo(lastPoint.value.x, lastPoint.value.y);
-   ctx.lineTo(cuurentPoint.x, cuurentPoint.y);
+   ctx.lineTo(currentPoint.x, currentPoint.y);
    ctx.stroke();
 
 
