@@ -1,11 +1,15 @@
 <template >
-  <Canvas class="w-full h-full" ref="canvasRef"> </Canvas>
+  <Canvas class="w-full h-full" ref="canvasRef" @mousedown="startDrawing"> </Canvas>
 </template>
 
 <script setup lang='ts'>
 import { ref, onMounted } from "vue";
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
+const startDrawing = (e: MouseEvent) => {
+console.log(e);
+
+}
 
 onMounted(() => {
   const canvas = canvasRef.value;
@@ -16,10 +20,16 @@ onMounted(() => {
   console.log(canvasRef.value);
 
   
-  ctx.fillStyle = "red";
-  ctx.fillRect(10, 10, 100, 100); // Un carré vert
-  ctx.strokeStyle = "green";
-  ctx.strokeRect(150, 10, 100, 100);
+//   ctx.fillStyle = "red";
+//   ctx.fillRect(10, 10, 100, 10); // Un carré vert
+//   ctx.strokeStyle = "green";
+//   ctx.strokeRect(150, 10, 100, 100);
+
+// ctx.beginPath();
+// ctx.moveTo(50, 50);
+// ctx.lineTo(200, 50);
+// ctx.lineTo(200, 200);
+// ctx.stroke();
 });
 </script>
 

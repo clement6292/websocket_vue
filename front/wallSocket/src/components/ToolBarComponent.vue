@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <div class="flex gap-5 justify-center mb-10">
+      <div class="flex gap-5 justify-center mb-10 m-10">
         <button class="bg-blue-100 p-2 rounded-md cursor-pointer">
           <Paintbrush :size="40" color="blue" />
         </button>
