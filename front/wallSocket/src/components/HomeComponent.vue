@@ -1,7 +1,11 @@
 <template>
-  <div class="flex flex-row h-screen">
-    <ToolBarComponent class="w-[35%]"/>
-    <CanvasComponent class="bg-blue-200"/>
+  <div class="flex">
+    <div class="w-[15%] h-screen " ref="toolbar" >
+        <ToolBarComponent />
+    </div>
+    <div class="bg-blue-200 w-full">
+        <CanvasComponent />
+    </div>
   </div>
 </template>
 
