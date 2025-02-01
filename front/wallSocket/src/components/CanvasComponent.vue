@@ -61,7 +61,7 @@ const draw = (el: MouseEvent) => {
    const ctx = canvas.getContext('2d');
    if(!ctx) return;   
 
- drawLIine(ctx, lastPoint.value, currentPoint, drawingStore.color, drawingStore.lineWidth);
+ drawLIine(ctx, lastPoint.value, currentPoint, drawingStore.color, drawingStore.lineWidth, drawingStore.isEraser);
    lastPoint.value = currentPoint;
 }
 

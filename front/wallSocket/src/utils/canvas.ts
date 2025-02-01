@@ -6,11 +6,12 @@ export const drawLIine = (
     startPoint:Point,
     endPoint:Point,
     color: string,
-    lineWidth:number
+    lineWidth:number,
+    isEraser:boolean
 
 ) =>{
     ctx.beginPath();
-   ctx.strokeStyle = color;
+   ctx.strokeStyle = isEraser ?'white' : color;
    ctx.lineWidth = lineWidth;
    ctx.lineCap ="round";
    ctx.lineJoin = "round";
@@ -18,4 +19,12 @@ export const drawLIine = (
    ctx.lineTo(endPoint.x, endPoint.y);
    ctx.stroke();
   
+}
+
+export const clearCanvas =(
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number
+) =>{
+  ctx.clearRect(0, 0, width, height);
 }
