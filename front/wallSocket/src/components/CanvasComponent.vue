@@ -1,41 +1,46 @@
-<template>
-   <canvas @mousedown="startDrawing" @mousemove="draw" ref="canvasRef" class="border   border-dark">
-
-   </canvas>
-</template>
-
 <script setup lang='ts'>
 import { ref, onMounted } from 'vue';
-
 const canvasRef = ref<HTMLCanvasElement | null>(null);
-
 const toolbarRef = ref<HTMLDivElement | null>(null);
-
 const lastPoint = ref<{ x: number, y: number } | null>(null);
+
+import { drawLIine } from "../utils/canvas";
+import { useDrawingStore } from "../stores/useDrawingStore"
+
+const drawingStore = useDrawingStore();
 
 const resizeCanvas = () => {
    const canvas = canvasRef.value;
    const toolbar = document.querySelector('.toolbar');
-   console.log(toolbar);
+   // console.log(toolbar);
    if (!canvas ||  !toolbar) return;
    canvas.width = window.innerWidth - toolbar.clientWidth;
-   canvas.height = window.innerHeight -toolbar.clientHeight ;
+   canvas.height = window.innerHeight - toolbar.clientHeight ;
 }
 
 // Démarrer me dessin
 const startDrawing = (e: MouseEvent) => {
-   console.log('start drawing', e);
-
+   const canvas = canvasRef.value;
+   const rect = canvas.getBoundingClientRect();
+   if (!canvas) return;
+    drawingStore.setIsDrawing(true);
+   // console.log('start drawing', e);
    lastPoint.value = {
-      x: e.clientX,
-      y: e.clientY
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
    }
-
    console.log(lastPoint.value)
+}
+
+//Arreter le dessin
+const stopDrawindg = () =>{
+   drawingStore.setIsDrawing(false);
+   lastPoint.value = null;
 }
 
 // Dessiner
 const draw = (el: MouseEvent) => {
+   if (!drawingStore.isDrawing) return;
    console.log('drawing', el);
 
    const canvas = canvasRef.value;
@@ -47,31 +52,24 @@ const draw = (el: MouseEvent) => {
    if(!rect) return; 
    console.log(rect);
    
-   
 
    const currentPoint = {
       x: el.clientX,
       y: el.clientY
    }
-
    if (!lastPoint.value) return;
-
    const ctx = canvas.getContext('2d');
-   
+   if(!ctx) return;   
 
-   ctx.beginPath();
-   ctx.strokeStyle = "red";
-   ctx.moveTo(lastPoint.value.x, lastPoint.value.y);
-   ctx.lineTo(currentPoint.x, currentPoint.y);
-   ctx.stroke();
-
-
+ drawLIine(ctx, lastPoint.value, currentPoint, drawingStore.color, drawingStore.lineWidth);
+   lastPoint.value = currentPoint;
 }
 
 onMounted(() => {
+   window.addEventListener('resize' , resizeCanvas);
    resizeCanvas();
-//   const canvas = canvasRef.value;
-// //   if (!canvas) return;
+  const canvas = canvasRef.value;
+  if (!canvas) return;
 
 // //   const ctx = canvas.getContext("2d");
 // //   canvasRef.value.getContext("2d");
@@ -93,3 +91,8 @@ onMounted(() => {
 </script>
 
 <style scoped></style>
+
+<template>
+   <canvas @mousedown="startDrawing" @mousemove="draw" @mouseup="stopDrawindg" ref="canvasRef" class=" border-green border-4">
+   </canvas>
+</template>

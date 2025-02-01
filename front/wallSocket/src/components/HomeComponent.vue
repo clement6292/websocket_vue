@@ -1,9 +1,9 @@
 <template>
   <div class="flex">
-    <div class="w-[15%] h-screen " ref="toolbar" >
+    <div class="w-[15%] h-screen "  >
         <ToolBarComponent />
     </div>
-    <div class="bg-blue-200 w-full">
+    <div class=" w-full">
         <CanvasComponent />
     </div>
   </div>
