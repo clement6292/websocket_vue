@@ -21,8 +21,8 @@ const resizeCanvas = () => {
 // Démarrer me dessin
 const startDrawing = (e: MouseEvent) => {
    const canvas = canvasRef.value;
-   const rect = canvas.getBoundingClientRect();
    if (!canvas) return;
+   const rect = canvas.getBoundingClientRect();
     drawingStore.setIsDrawing(true);
    // console.log('start drawing', e);
    lastPoint.value = {
