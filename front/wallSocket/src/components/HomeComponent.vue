@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div class="w-[15%] h-screen "  >
+    <div class="w-[15%] h-screen border-2 border-blue-500 "  >
         <ToolBarComponent />
     </div>
     <div class=" w-full">

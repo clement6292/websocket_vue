@@ -41,7 +41,7 @@ const stopDrawindg = () =>{
 // Dessiner
 const draw = (el: MouseEvent) => {
    if (!drawingStore.isDrawing) return;
-   console.log('drawing', el);
+   // console.log('drawing', el);
 
    const canvas = canvasRef.value;
    const toolbar = document.querySelector('.toolbar');
@@ -93,6 +93,6 @@ onMounted(() => {
 <style scoped></style>
 
 <template>
-   <canvas @mousedown="startDrawing" @mousemove="draw" @mouseup="stopDrawindg" ref="canvasRef" class=" border-green border-4">
+   <canvas @mousedown="startDrawing" @mousemove="draw" @mouseup="stopDrawindg" ref="canvasRef" class="">
    </canvas>
 </template>
