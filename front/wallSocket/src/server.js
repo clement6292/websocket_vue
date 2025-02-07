@@ -31,8 +31,13 @@ app.use(express.static(join(__dirname,'../dist')));
 io.on("connection", (socket) =>{
  console.log("Nouvelle connexion ", socket.id);
 
+
+
  socket.on("draw", (data) =>{
-    console.log(data);
+    socket.broadcast.emit('draw', {
+        data
+     })
+//   console.log(data);
  })
 
 })

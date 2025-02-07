@@ -35,7 +35,7 @@ const startDrawing = (e: MouseEvent) => {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
    }
-   console.log(lastPoint.value)
+   // console.log(lastPoint.value)
 }
 
 //Arreter le dessin
@@ -80,6 +80,11 @@ const draw = (el: MouseEvent) => {
 
 onMounted(() => {
    socketStore.connect();
+
+   socketStore.socket?.on('draw',(data)=>{
+      console.log(data);
+      
+   })
    window.addEventListener('resize' , resizeCanvas);
    resizeCanvas();
   const canvas = canvasRef.value;
