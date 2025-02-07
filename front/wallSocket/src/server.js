@@ -3,6 +3,7 @@ import express from 'express';
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import  { WebSocketServer }  from "ws";
+import { Server } from "socket.io";
 
 
 
@@ -11,8 +12,9 @@ const port = 9100;
 const app = express();
 const serverHttp = createServer(app)
 
-// server de websocket
-const ws = new WebSocketServer({ server: serverHttp });
+// server de websocket côté server
+const io = new Server(serverHttp);
+
 
 
 // chemin du fichier serveur en cours d'execution
@@ -25,6 +27,15 @@ const __dirname = dirname(__fileName);
 // middlewares
 app.use(express.static(join(__dirname,'../dist')));
 
+// Ecoute de l'evenement connection
+io.on("connection", (socket) =>{
+ console.log("Nouvelle connexion ", socket.id);
+
+ socket.on("draw", (data) =>{
+    console.log(data);
+ })
+
+})
 
 
 

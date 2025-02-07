@@ -5,9 +5,15 @@ const toolbarRef = ref<HTMLDivElement | null>(null);
 const lastPoint = ref<{ x: number, y: number } | null>(null);
 
 import { drawLIine } from "../utils/canvas";
-import { useDrawingStore } from "../stores/useDrawingStore"
+import { useDrawingStore } from "../stores/useDrawingStore";
+import {useSocketStore} from "../stores/useSocketStore";
+
+
 
 const drawingStore = useDrawingStore();
+const socketStore = useSocketStore();
+
+
 
 const resizeCanvas = () => {
    const canvas = canvasRef.value;
@@ -62,10 +68,18 @@ const draw = (el: MouseEvent) => {
    if(!ctx) return;   
 
  drawLIine(ctx, lastPoint.value, currentPoint, drawingStore.color, drawingStore.lineWidth, drawingStore.isEraser);
+ socketStore.emit('draw', {
+    points:[
+      lastPoint.value,currentPoint],
+      color: drawingStore.color,
+      lineWidth: drawingStore.lineWidth,
+      isEraser: drawingStore.isEraser
+   })
    lastPoint.value = currentPoint;
 }
 
 onMounted(() => {
+   socketStore.connect();
    window.addEventListener('resize' , resizeCanvas);
    resizeCanvas();
   const canvas = canvasRef.value;
