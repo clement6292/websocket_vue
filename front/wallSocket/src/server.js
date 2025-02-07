@@ -1,14 +1,36 @@
 import { createServer } from "http";
-import express from 'express'
+import express from 'express';
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import  { WebSocketServer }  from "ws";
+
+
+
 
 const port = 9100;
 const app = express();
-const serverHttp = createServer(app) 
+const serverHttp = createServer(app)
+
+// server de websocket
+const ws = new WebSocketServer({ server: serverHttp });
 
 
-// configuration avec express avec express on a plus besoin de l'encodage
+// chemin du fichier serveur en cours d'execution
+const __fileName = fileURLToPath (import.meta.url);
+
+// chemin du dossier parent du fichier server
+const __dirname = dirname(__fileName);
+
+
+// middlewares
+app.use(express.static(join(__dirname,'../dist')));
+
+
+
+
+// configuration avec express avec express on a plus besoin de l'encodage ce qui fait tourné le port du back sur le même host que le front
 app.get("/",(req, res)=>{
-    res.send("Hello socket ❤🚀⚽")
+    res.sendFile(join(__dirname,"../dist", "index.html"));
 })
 
 //configuration avec Http 

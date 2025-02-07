@@ -12,3 +12,5 @@ app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
+
+const clientWs = new WebSocket('ws://localhost:9100');

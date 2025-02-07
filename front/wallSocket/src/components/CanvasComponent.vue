@@ -33,7 +33,7 @@ const startDrawing = (e: MouseEvent) => {
 }
 
 //Arreter le dessin
-const stopDrawindg = () =>{
+const stopDrawindg = () => {
    drawingStore.setIsDrawing(false);
    lastPoint.value = null;
 }
@@ -45,12 +45,12 @@ const draw = (el: MouseEvent) => {
 
    const canvas = canvasRef.value;
    const toolbar = document.querySelector('.toolbar');
-   console.log(toolbar);
+   // console.log(toolbar);
    
    if (!canvas) return;
    const rect = canvas.getBoundingClientRect();
    if(!rect) return; 
-   console.log(rect);
+   // console.log(rect);
    
 
    const currentPoint = {
