@@ -4,7 +4,7 @@ const canvasRef = ref<HTMLCanvasElement | null>(null);
 const toolbarRef = ref<HTMLDivElement | null>(null);
 const lastPoint = ref<{ x: number; y: number } | null>(null);
 
-import { drawLIine } from "../utils/canvas";
+import { drawLine } from "../utils/canvas";
 import { useDrawingStore } from "../stores/useDrawingStore";
 import { useSocketStore } from "../stores/useSocketStore";
 
@@ -62,7 +62,7 @@ const draw = (el: MouseEvent) => {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  drawLIine(
+  drawLine(
     ctx,
     lastPoint.value,
     currentPoint,
@@ -92,7 +92,7 @@ onMounted(() => {
   socketStore.socket?.on(
     "serverDraw",
     ({ points, color, lineWidth, isEraser }) => {
-      drawLIine(ctx, points[0], points[1], color, lineWidth, isEraser);
+      drawLine(ctx, points[0], points[1], color, lineWidth, isEraser);
 
       console.log(points);
     }

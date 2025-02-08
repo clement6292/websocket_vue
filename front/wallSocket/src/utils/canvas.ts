@@ -1,7 +1,7 @@
 import type { Point } from '../types/canvas'
 
 
-export const drawLIine = (
+export const drawLine = (
     ctx: CanvasRenderingContext2D,
     startPoint:Point,
     endPoint:Point,
