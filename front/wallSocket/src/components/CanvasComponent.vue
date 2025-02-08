@@ -1,117 +1,132 @@
 <script setup lang='ts'>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const toolbarRef = ref<HTMLDivElement | null>(null);
-const lastPoint = ref<{ x: number, y: number } | null>(null);
+const lastPoint = ref<{ x: number; y: number } | null>(null);
 
 import { drawLIine } from "../utils/canvas";
 import { useDrawingStore } from "../stores/useDrawingStore";
-import {useSocketStore} from "../stores/useSocketStore";
-
-
+import { useSocketStore } from "../stores/useSocketStore";
 
 const drawingStore = useDrawingStore();
 const socketStore = useSocketStore();
 
-
-
 const resizeCanvas = () => {
-   const canvas = canvasRef.value;
-   const toolbar = document.querySelector('.toolbar');
-   // console.log(toolbar);
-   if (!canvas ||  !toolbar) return;
-   canvas.width = window.innerWidth - toolbar.clientWidth;
-   canvas.height = window.innerHeight - toolbar.clientHeight ;
-}
+  const canvas = canvasRef.value;
+  const toolbar = document.querySelector(".toolbar");
+  // console.log(toolbar);
+  if (!canvas || !toolbar) return;
+  canvas.width = window.innerWidth - toolbar.clientWidth;
+  canvas.height = window.innerHeight - toolbar.clientHeight;
+};
 
 // Démarrer me dessin
 const startDrawing = (e: MouseEvent) => {
-   const canvas = canvasRef.value;
-   if (!canvas) return;
-   const rect = canvas.getBoundingClientRect();
-    drawingStore.setIsDrawing(true);
-   // console.log('start drawing', e);
-   lastPoint.value = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-   }
-   // console.log(lastPoint.value)
-}
+  const canvas = canvasRef.value;
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  drawingStore.setIsDrawing(true);
+  // console.log('start drawing', e);
+  lastPoint.value = {
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top,
+  };
+  // console.log(lastPoint.value)
+};
 
 //Arreter le dessin
 const stopDrawindg = () => {
-   drawingStore.setIsDrawing(false);
-   lastPoint.value = null;
-}
+  drawingStore.setIsDrawing(false);
+  lastPoint.value = null;
+};
 
 // Dessiner
 const draw = (el: MouseEvent) => {
-   if (!drawingStore.isDrawing) return;
-   // console.log('drawing', el);
+  if (!drawingStore.isDrawing) return;
+  // console.log('drawing', el);
 
-   const canvas = canvasRef.value;
-   const toolbar = document.querySelector('.toolbar');
-   // console.log(toolbar);
-   
-   if (!canvas) return;
-   const rect = canvas.getBoundingClientRect();
-   if(!rect) return; 
-   // console.log(rect);
-   
+  const canvas = canvasRef.value;
+  const toolbar = document.querySelector(".toolbar");
+  // console.log(toolbar);
 
-   const currentPoint = {
-      x: el.clientX,
-      y: el.clientY
-   }
-   if (!lastPoint.value) return;
-   const ctx = canvas.getContext('2d');
-   if(!ctx) return;   
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  if (!rect) return;
+  // console.log(rect);
 
- drawLIine(ctx, lastPoint.value, currentPoint, drawingStore.color, drawingStore.lineWidth, drawingStore.isEraser);
- socketStore.emit('draw', {
-    points:[
-      lastPoint.value,currentPoint],
-      color: drawingStore.color,
-      lineWidth: drawingStore.lineWidth,
-      isEraser: drawingStore.isEraser
-   })
-   lastPoint.value = currentPoint;
-}
+  const currentPoint = {
+    x: el.clientX,
+    y: el.clientY,
+  };
+  if (!lastPoint.value) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  drawLIine(
+    ctx,
+    lastPoint.value,
+    currentPoint,
+    drawingStore.color,
+    drawingStore.lineWidth,
+    drawingStore.isEraser
+  );
+  socketStore.sender("draw", {
+    points: [lastPoint.value, currentPoint],
+    color: drawingStore.color,
+    lineWidth: drawingStore.lineWidth,
+    isEraser: drawingStore.isEraser,
+  });
+  lastPoint.value = currentPoint;
+};
 
 onMounted(() => {
-   socketStore.connect();
-
-   socketStore.socket?.on('draw',(data)=>{
-      console.log(data);
-      
-   })
-   window.addEventListener('resize' , resizeCanvas);
-   resizeCanvas();
   const canvas = canvasRef.value;
   if (!canvas) return;
 
-// //   const ctx = canvas.getContext("2d");
-// //   canvasRef.value.getContext("2d");
-// //   console.log(canvasRef.value);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
 
-  
-// //   ctx.fillStyle = "red";
-// //   ctx.fillRect(10, 10, 100, 10); // Un carré vert
-// //   ctx.strokeStyle = "green";
-// //   ctx.strokeRect(150, 10, 100, 100);
+  socketStore.connect();
 
-// // ctx.beginPath();
-// // ctx.moveTo(50, 50);
-// // ctx.lineTo(200, 50);
-// // ctx.lineTo(200, 200);
-// // ctx.stroke();
-})
+  // Ecoute de l'evenement serverDraw venant du server
+  socketStore.socket?.on(
+    "serverDraw",
+    ({ points, color, lineWidth, isEraser }) => {
+      drawLIine(ctx, points[0], points[1], color, lineWidth, isEraser);
 
+      console.log(points);
+    }
+  );
+
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+
+  // //   const ctx = canvas.getContext("2d");
+  // //   canvasRef.value.getContext("2d");
+  // //   console.log(canvasRef.value);
+
+  // //   ctx.fillStyle = "red";
+  // //   ctx.fillRect(10, 10, 100, 10); // Un carré vert
+  // //   ctx.strokeStyle = "green";
+  // //   ctx.strokeRect(150, 10, 100, 100);
+
+  // // ctx.beginPath();
+  // // ctx.moveTo(50, 50);
+  // // ctx.lineTo(200, 50);
+  // // ctx.lineTo(200, 200);
+  // // ctx.stroke();
+});
 </script>
 
 <style scoped></style>
 
 <template>
-   <canvas @mousedown="startDrawing" @mousemove="draw" @mouseup="stopDrawindg" ref="canvasRef" class="">
-   </canvas>
+  <canvas
+    @mousedown="startDrawing"
+    @mousemove="draw"
+    @mouseup="stopDrawindg"
+    ref="canvasRef"
+    class=""
+  >
+  </canvas>
 </template>

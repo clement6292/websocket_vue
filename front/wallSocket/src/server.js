@@ -13,7 +13,11 @@ const app = express();
 const serverHttp = createServer(app)
 
 // server de websocket côté server
-const io = new Server(serverHttp);
+const io = new Server(serverHttp,{
+    cors: {
+        origin: true
+    }
+});
 
 
 
@@ -34,10 +38,8 @@ io.on("connection", (socket) =>{
 
 
  socket.on("draw", (data) =>{
-    socket.broadcast.emit('draw', {
-        data
-     })
-//   console.log(data);
+    socket.broadcast.emit('serverDraw', {...data})
+
  })
 
 })
